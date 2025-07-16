@@ -1,16 +1,10 @@
-import { Home } from "../components/Home";
-import type { Route } from "./+types/home";
+import Auth from "../components/Auth";
 
-
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
-  ];
-}
-
-export function loader({ context }: Route.LoaderArgs) {
-  return { message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE };
-}
-
-export default Home;
+export default function Home() {
+  return (
+    <div>
+      <h1></h1>
+      <Auth />
+    </div>
+  );
+} 
