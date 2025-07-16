@@ -3,14 +3,14 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBx-bolmWovKG_w6La1OwLi88CLNKpSt1s",
-    authDomain: "cineflex-86530.firebaseapp.com",
-    projectId: "cineflex-86530",
-    storageBucket: "cineflex-86530.firebasestorage.app",
-    messagingSenderId: "903982145051",
-    appId: "1:903982145051:web:700cec599172f5442a62be",
-    measurementId: "G-WGGWFTZ4VF"
-  };
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+};
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
