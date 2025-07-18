@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-export function Welcome({ message }: { message: string }) {
+function Welcome() {
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    setUserEmail(localStorage.getItem("userEmail"));
+  }, []);
+
   return (
     <main className="flex items-center justify-center pt-16 pb-4">
       <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
@@ -12,14 +18,18 @@ export function Welcome({ message }: { message: string }) {
         <div className="max-w-[300px] w-full space-y-6 px-4">
           <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
             <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-              What's next?
+          
             </p>
             <ul>
-              <li className="self-stretch p-3 leading-normal">{message}</li>
+              <li className="self-stretch p-3 leading-normal">
+                Hoşgeldin{userEmail ? `, ${userEmail}` : ""}!
+              </li>
             </ul>
           </nav>
         </div>
       </div>
     </main>
   );
-} 
+}
+
+export default Welcome; 
