@@ -10,7 +10,8 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { AuthProvider } from "./components/AuthContext";
+import { AuthProvider, useAuth } from "./components/AuthContext";
+import Auth from "./components/Auth";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -47,9 +48,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <AuthProvider>
-      <Outlet />
+      <AppContent />
     </AuthProvider>
   );
+}
+
+function AppContent() {
+  const { user } = useAuth();
+  return (
+    user ? <Outlet /> : <Welcome />
+  );
+}
+
+function Welcome() {
+  return (
+    <Auth />
+  )
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

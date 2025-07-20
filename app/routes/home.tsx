@@ -80,11 +80,6 @@ export default function Home() {
     setFavorites(favorites.filter((f) => f.id !== film.id));
   };
 
-  // Eğer kullanıcı yoksa Auth bileşenini göster
-  if (!user) {
-    return <Auth />;
-  }
-
   return (
     <div style={{ maxWidth: '100vw', padding: '24px 8px', minHeight: '100vh', background: '#fafafa' }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, maxWidth: 1400, margin: '0 auto 0 auto' }}>
