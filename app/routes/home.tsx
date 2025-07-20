@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import FilmCard, { type Film } from "../components/FilmCard";
-import { auth } from "../firebase";
 import Auth from "../components/Auth";
 import { fetchPopularMovies, fetchNowPlayingMovies, fetchUpcomingMovies, type TMDBMovie } from "../components/tmdb";
+import { useAuth } from "../components/AuthContext";
 
 export default function Home() {
   const [nowPlayingMovies, setNowPlayingMovies] = useState<TMDBMovie[]>([]);
   const [nowPlayingLoading, setNowPlayingLoading] = useState(true);
   const [nowPlayingError, setNowPlayingError] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Film[]>([]);
-  const [user, setUser] = useState<any>(null);
   const [popularMovies, setPopularMovies] = useState<TMDBMovie[]>([]);
   const [popularLoading, setPopularLoading] = useState(true);
   const [popularError, setPopularError] = useState<string | null>(null);
@@ -21,8 +20,7 @@ export default function Home() {
   const [showUpcoming, setShowUpcoming] = useState(false);
   const [showFavorites, setShowFavorites] = useState(true);
   const CARD_GAP = 24;
-  // useNavigate ve navigate ile ilgili kodları kaldırdım
-  // /welcome yönlendirmesini yapan useEffect'i de kaldırdım
+  const { user, logout } = useAuth();
 
   // TMDB'den now playing filmleri çek
   useEffect(() => {
@@ -72,11 +70,6 @@ export default function Home() {
       });
   }, []);
 
-  // Kullanıcıyı Auth bileşeninden almak için bir callback fonksiyonu
-  const handleAuthSuccess = (userObj: any) => {
-    setUser(userObj);
-  };
-
   const handleAddToFavorites = (film: Film) => {
     if (!favorites.find((f) => f.id === film.id)) {
       setFavorites([...favorites, film]);
@@ -87,15 +80,9 @@ export default function Home() {
     setFavorites(favorites.filter((f) => f.id !== film.id));
   };
 
-  const handleLogout = async () => {
-    await auth.signOut();
-    setUser(null);
-    window.location.reload();
-  };
-
   // Eğer kullanıcı yoksa Auth bileşenini göster
   if (!user) {
-    return <Auth onAuthSuccess={handleAuthSuccess} />;
+    return <Auth />;
   }
 
   return (
@@ -124,7 +111,7 @@ export default function Home() {
             Cineflex
           </span>
         </div>
-        <button onClick={handleLogout} style={{ padding: "8px 16px", borderRadius: 4, background: "#f44336", color: "white", border: "none" }}>
+        <button onClick={logout} style={{ padding: "8px 16px", borderRadius: 4, background: "#f44336", color: "white", border: "none" }}>
           Log Out
         </button>
       </div>

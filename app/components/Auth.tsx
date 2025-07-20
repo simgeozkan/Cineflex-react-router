@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import { signInWithPopup, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { auth } from "../firebase";
+import { useAuth } from "./AuthContext";
 
-type AuthProps = {
-  onAuthSuccess?: (user: any) => void;
-};
-
-const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
+const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
-  const [user, setUser] = useState<any>(null);
-
+  const { user, login, logout } = useAuth();
 
   const handleGoogleSignIn = async () => {
     setError("");
@@ -18,8 +14,13 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      setUser(result.user);
-      if (onAuthSuccess) onAuthSuccess(result.user);
+      // Context'e kullanıcıyı kaydet
+      login({
+        uid: result.user.uid,
+        displayName: result.user.displayName,
+        email: result.user.email,
+        photoURL: result.user.photoURL,
+      });
     } catch (err: any) {
       setError(err.message);
     }
@@ -27,7 +28,7 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
 
   const handleLogout = () => {
     auth.signOut();
-    setUser(null);
+    logout();
   };
 
   if (user) {
