@@ -45,6 +45,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+
+ //default olarak disari aktarilan App componeneti
+ 
 export default function App() {
   return (
     <AuthProvider>
@@ -52,6 +55,9 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+
+ //kullanici giris yaparsa sayfaya yonlendir yapmasa giris yapmasini sagla
 
 function AppContent() {
   const { user } = useAuth();

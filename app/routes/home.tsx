@@ -3,6 +3,7 @@ import FilmCard, { type Film } from "../components/FilmCard";
 import Auth from "../components/Auth";
 import { fetchPopularMovies, fetchNowPlayingMovies, fetchUpcomingMovies, type TMDBMovie } from "../components/tmdb";
 import { useAuth } from "../components/AuthContext";
+import Welcome from "../welcome/welcome";
 
 export default function Home() {
   const [nowPlayingMovies, setNowPlayingMovies] = useState<TMDBMovie[]>([]);
@@ -21,6 +22,9 @@ export default function Home() {
   const [showFavorites, setShowFavorites] = useState(true);
   const CARD_GAP = 24;
   const { user, logout } = useAuth();
+
+
+  //3 kategoride API yardimiyla filmleri cekip kategoriler altinda gosterdik
 
   // TMDB'den now playing filmleri çek
   useEffect(() => {
@@ -54,21 +58,37 @@ export default function Home() {
       });
   }, []);
 
+
+
+
   // TMDB'den upcoming filmleri çek
+
+
   useEffect(() => {
+
     const apiKey = import.meta.env.VITE_TMDB_API_KEY;
+
     if (!apiKey) return;
+
     setUpcomingLoading(true);
+
     fetchUpcomingMovies(apiKey)
       .then((movies) => {
         setUpcomingMovies(movies);
         setUpcomingLoading(false);
       })
+
       .catch((err) => {
         setUpcomingError(err.message);
         setUpcomingLoading(false);
+
       });
   }, []);
+
+
+
+
+// tetikleyecegimiz fonksiyonlari buraya ekledik
 
   const handleAddToFavorites = (film: Film) => {
     if (!favorites.find((f) => f.id === film.id)) {
@@ -80,13 +100,24 @@ export default function Home() {
     setFavorites(favorites.filter((f) => f.id !== film.id));
   };
 
+
+  // Ekranda gosterilecek logo ve logout butonu burda tanimlandi.ayrica APi den gelen filmler card yapisi icinde burada listelenecek
+
   return (
+
+   
     <div style={{ maxWidth: '100vw', padding: '24px 8px', minHeight: '100vh', background: '#fafafa' }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, maxWidth: 1400, margin: '0 auto 0 auto' }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
         }}>
+
+            <div style={{ marginRight: 16 }}>
+              <Welcome />
+            </div>
+          {/* Cineflex logo tasarimi */}
+
           <span style={{
             fontFamily: 'Montserrat, Arial, sans-serif',
             fontWeight: 900,
@@ -103,17 +134,23 @@ export default function Home() {
             lineHeight: 1.1,
             marginRight: 8
           }}>
-            Cineflex
+            Cineflex 
           </span>
         </div>
+    
+ 
+    {/* Log out Buton tasarimi*/}
         <button onClick={logout} style={{ padding: "8px 16px", borderRadius: 4, background: "#f44336", color: "white", border: "none" }}>
-          Log Out
+          LogOut 
         </button>
+
+
       </div>
+    <div style={{ marginBottom: 32, maxWidth: 1400, margin: '0 auto' }}>
 
 
-      <div style={{ marginBottom: 32, maxWidth: 1400, margin: '0 auto' }}>
-        {/* Popular Movies Toggle */}
+
+    {/* Popular Movies Toggle */}
         <div style={{ marginBottom: 32 }}>
           <h2
             style={{
@@ -160,7 +197,9 @@ export default function Home() {
             )
           )}
         </div>
-        {/* Now Playing Toggle */}
+
+
+ {/* Now Playing Toggle */}
         <div style={{ marginBottom: 32 }}>
           <h2
             style={{
@@ -207,7 +246,11 @@ export default function Home() {
             )
           )}
         </div>
-        {/* Upcoming Toggle */}
+
+
+
+
+{/* Upcoming Toggle */}
         <div style={{ marginBottom: 32 }}>
           <h2
             style={{
@@ -256,7 +299,7 @@ export default function Home() {
         </div>
       </div>
 
-
+    {/* Favorites Toggle */}
       
       <div style={{ maxWidth: 1400, margin: '0 auto', marginBottom: 32 }}>
         <div style={{ marginBottom: 32 }}>
@@ -291,7 +334,7 @@ export default function Home() {
                     key={film.id}
                     film={film}
                     isFavorite={true}
-                    onAddToFavorites={() => handleRemoveFromFavorites(film)}
+                    onAddToFavorites={() => handleRemoveFromFavorites(film)} // fonksiyon tetiklenir
                   />
                 ))}
               </div>
@@ -301,4 +344,4 @@ export default function Home() {
       </div>
     </div>
   );
-} 
+}

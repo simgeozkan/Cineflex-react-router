@@ -16,12 +16,17 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const authKey = 'authUser2';
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+
+
+  
   const [user, setUser] = useState<User | null>(null);
 
   // Mount olduğunda localStorage'dan kullanıcıyı oku
   useEffect(() => {
-    const storedUser = localStorage.getItem('authUser');
+    const storedUser = localStorage.getItem(authKey);
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -29,12 +34,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = (user: User) => {
     setUser(user);
-    localStorage.setItem('authUser', JSON.stringify(user));
+    localStorage.setItem(authKey, JSON.stringify(user));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('authUser');
+    localStorage.removeItem(authKey);
   };
 
   return (
